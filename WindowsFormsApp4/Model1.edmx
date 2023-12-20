@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище PoliklinikaModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Appointments">
+          <Key>
+            <PropertyRef Name="ID_записи" />
+          </Key>
+          <Property Name="ID_записи" Type="int" Nullable="false" />
+          <Property Name="ID_пациента" Type="int" />
+          <Property Name="ID_врача" Type="int" />
+          <Property Name="Дата_и_время_приема" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ClinicDepartments">
+          <Key>
+            <PropertyRef Name="ID_участка" />
+          </Key>
+          <Property Name="ID_участка" Type="int" Nullable="false" />
+          <Property Name="Название_участка" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Doctors">
+          <Key>
+            <PropertyRef Name="ID_врача" />
+          </Key>
+          <Property Name="ID_врача" Type="int" Nullable="false" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Специализация" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="DoctorsSchedule">
+          <Key>
+            <PropertyRef Name="ID_записи" />
+          </Key>
+          <Property Name="ID_записи" Type="int" Nullable="false" />
+          <Property Name="ID_врача" Type="int" />
+          <Property Name="Дата" Type="date" />
+          <Property Name="Время_начала" Type="time" Precision="7" />
+          <Property Name="Время_окончания" Type="time" Precision="7" />
+          <Property Name="Доступность" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="ID_пациента" />
+          </Key>
+          <Property Name="ID_пациента" Type="int" Nullable="false" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Адрес" Type="nvarchar" MaxLength="100" />
+          <Property Name="Номер_телефона" Type="nvarchar" MaxLength="20" />
+          <Property Name="Дата_рождения" Type="date" />
+          <Property Name="ID_участка" Type="int" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID_пользователя" />
+          </Key>
+          <Property Name="ID_пользователя" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Логин" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Пароль" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Тип" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Appointme__ID_вр__46E78A0C">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="0..1" />
+          <End Role="Appointments" Type="Self.Appointments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctors">
+              <PropertyRef Name="ID_врача" />
+            </Principal>
+            <Dependent Role="Appointments">
+              <PropertyRef Name="ID_врача" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Appointme__ID_па__45F365D3">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="0..1" />
+          <End Role="Appointments" Type="Self.Appointments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="ID_пациента" />
+            </Principal>
+            <Dependent Role="Appointments">
+              <PropertyRef Name="ID_пациента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DoctorsSc__ID_вр__4316F928">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="0..1" />
+          <End Role="DoctorsSchedule" Type="Self.DoctorsSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctors">
+              <PropertyRef Name="ID_врача" />
+            </Principal>
+            <Dependent Role="DoctorsSchedule">
+              <PropertyRef Name="ID_врача" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Patients__ID_уча__3E52440B">
+          <End Role="ClinicDepartments" Type="Self.ClinicDepartments" Multiplicity="0..1" />
+          <End Role="Patients" Type="Self.Patients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClinicDepartments">
+              <PropertyRef Name="ID_участка" />
+            </Principal>
+            <Dependent Role="Patients">
+              <PropertyRef Name="ID_участка" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище PoliklinikaModelContainer">
+          <EntitySet Name="Appointments" EntityType="Self.Appointments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClinicDepartments" EntityType="Self.ClinicDepartments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Doctors" EntityType="Self.Doctors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DoctorsSchedule" EntityType="Self.DoctorsSchedule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Appointme__ID_вр__46E78A0C" Association="Self.FK__Appointme__ID_вр__46E78A0C">
+            <End Role="Doctors" EntitySet="Doctors" />
+            <End Role="Appointments" EntitySet="Appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Appointme__ID_па__45F365D3" Association="Self.FK__Appointme__ID_па__45F365D3">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Appointments" EntitySet="Appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DoctorsSc__ID_вр__4316F928" Association="Self.FK__DoctorsSc__ID_вр__4316F928">
+            <End Role="Doctors" EntitySet="Doctors" />
+            <End Role="DoctorsSchedule" EntitySet="DoctorsSchedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Patients__ID_уча__3E52440B" Association="Self.FK__Patients__ID_уча__3E52440B">
+            <End Role="ClinicDepartments" EntitySet="ClinicDepartments" />
+            <End Role="Patients" EntitySet="Patients" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PoliklinikaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Appointments">
+          <Key>
+            <PropertyRef Name="ID_записи" />
+          </Key>
+          <Property Name="ID_записи" Type="Int32" Nullable="false" />
+          <Property Name="ID_пациента" Type="Int32" />
+          <Property Name="ID_врача" Type="Int32" />
+          <Property Name="Дата_и_время_приема" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Doctors" Relationship="Self.FK__Appointme__ID_вр__46E78A0C" FromRole="Appointments" ToRole="Doctors" />
+          <NavigationProperty Name="Patients" Relationship="Self.FK__Appointme__ID_па__45F365D3" FromRole="Appointments" ToRole="Patients" />
+        </EntityType>
+        <EntityType Name="ClinicDepartments">
+          <Key>
+            <PropertyRef Name="ID_участка" />
+          </Key>
+          <Property Name="ID_участка" Type="Int32" Nullable="false" />
+          <Property Name="Название_участка" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Patients" Relationship="Self.FK__Patients__ID_уча__3E52440B" FromRole="ClinicDepartments" ToRole="Patients" />
+        </EntityType>
+        <EntityType Name="Doctors">
+          <Key>
+            <PropertyRef Name="ID_врача" />
+          </Key>
+          <Property Name="ID_врача" Type="Int32" Nullable="false" />
+          <Property Name="Имя" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Специализация" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Appointments" Relationship="Self.FK__Appointme__ID_вр__46E78A0C" FromRole="Doctors" ToRole="Appointments" />
+          <NavigationProperty Name="DoctorsSchedule" Relationship="Self.FK__DoctorsSc__ID_вр__4316F928" FromRole="Doctors" ToRole="DoctorsSchedule" />
+        </EntityType>
+        <EntityType Name="DoctorsSchedule">
+          <Key>
+            <PropertyRef Name="ID_записи" />
+          </Key>
+          <Property Name="ID_записи" Type="Int32" Nullable="false" />
+          <Property Name="ID_врача" Type="Int32" />
+          <Property Name="Дата" Type="DateTime" Precision="0" />
+          <Property Name="Время_начала" Type="Time" Precision="7" />
+          <Property Name="Время_окончания" Type="Time" Precision="7" />
+          <Property Name="Доступность" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Doctors" Relationship="Self.FK__DoctorsSc__ID_вр__4316F928" FromRole="DoctorsSchedule" ToRole="Doctors" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="ID_пациента" />
+          </Key>
+          <Property Name="ID_пациента" Type="Int32" Nullable="false" />
+          <Property Name="Имя" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Адрес" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Номер_телефона" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Дата_рождения" Type="DateTime" Precision="0" />
+          <Property Name="ID_участка" Type="Int32" />
+          <NavigationProperty Name="Appointments" Relationship="Self.FK__Appointme__ID_па__45F365D3" FromRole="Patients" ToRole="Appointments" />
+          <NavigationProperty Name="ClinicDepartments" Relationship="Self.FK__Patients__ID_уча__3E52440B" FromRole="Patients" ToRole="ClinicDepartments" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID_пользователя" />
+          </Key>
+          <Property Name="ID_пользователя" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Логин" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Пароль" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Тип" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Appointme__ID_вр__46E78A0C">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="0..1" />
+          <End Role="Appointments" Type="Self.Appointments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctors">
+              <PropertyRef Name="ID_врача" />
+            </Principal>
+            <Dependent Role="Appointments">
+              <PropertyRef Name="ID_врача" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Appointme__ID_па__45F365D3">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="0..1" />
+          <End Role="Appointments" Type="Self.Appointments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="ID_пациента" />
+            </Principal>
+            <Dependent Role="Appointments">
+              <PropertyRef Name="ID_пациента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Patients__ID_уча__3E52440B">
+          <End Role="ClinicDepartments" Type="Self.ClinicDepartments" Multiplicity="0..1" />
+          <End Role="Patients" Type="Self.Patients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClinicDepartments">
+              <PropertyRef Name="ID_участка" />
+            </Principal>
+            <Dependent Role="Patients">
+              <PropertyRef Name="ID_участка" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DoctorsSc__ID_вр__4316F928">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="0..1" />
+          <End Role="DoctorsSchedule" Type="Self.DoctorsSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctors">
+              <PropertyRef Name="ID_врача" />
+            </Principal>
+            <Dependent Role="DoctorsSchedule">
+              <PropertyRef Name="ID_врача" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PoliklinikaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Appointments" EntityType="Self.Appointments" />
+          <EntitySet Name="ClinicDepartments" EntityType="Self.ClinicDepartments" />
+          <EntitySet Name="Doctors" EntityType="Self.Doctors" />
+          <EntitySet Name="DoctorsSchedule" EntityType="Self.DoctorsSchedule" />
+          <EntitySet Name="Patients" EntityType="Self.Patients" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK__Appointme__ID_вр__46E78A0C" Association="Self.FK__Appointme__ID_вр__46E78A0C">
+            <End Role="Doctors" EntitySet="Doctors" />
+            <End Role="Appointments" EntitySet="Appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Appointme__ID_па__45F365D3" Association="Self.FK__Appointme__ID_па__45F365D3">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Appointments" EntitySet="Appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Patients__ID_уча__3E52440B" Association="Self.FK__Patients__ID_уча__3E52440B">
+            <End Role="ClinicDepartments" EntitySet="ClinicDepartments" />
+            <End Role="Patients" EntitySet="Patients" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DoctorsSc__ID_вр__4316F928" Association="Self.FK__DoctorsSc__ID_вр__4316F928">
+            <End Role="Doctors" EntitySet="Doctors" />
+            <End Role="DoctorsSchedule" EntitySet="DoctorsSchedule" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище PoliklinikaModelContainer" CdmEntityContainer="PoliklinikaEntities">
+          <EntitySetMapping Name="Appointments">
+            <EntityTypeMapping TypeName="PoliklinikaModel.Appointments">
+              <MappingFragment StoreEntitySet="Appointments">
+                <ScalarProperty Name="ID_записи" ColumnName="ID_записи" />
+                <ScalarProperty Name="ID_пациента" ColumnName="ID_пациента" />
+                <ScalarProperty Name="ID_врача" ColumnName="ID_врача" />
+                <ScalarProperty Name="Дата_и_время_приема" ColumnName="Дата_и_время_приема" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClinicDepartments">
+            <EntityTypeMapping TypeName="PoliklinikaModel.ClinicDepartments">
+              <MappingFragment StoreEntitySet="ClinicDepartments">
+                <ScalarProperty Name="ID_участка" ColumnName="ID_участка" />
+                <ScalarProperty Name="Название_участка" ColumnName="Название_участка" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Doctors">
+            <EntityTypeMapping TypeName="PoliklinikaModel.Doctors">
+              <MappingFragment StoreEntitySet="Doctors">
+                <ScalarProperty Name="ID_врача" ColumnName="ID_врача" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Специализация" ColumnName="Специализация" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DoctorsSchedule">
+            <EntityTypeMapping TypeName="PoliklinikaModel.DoctorsSchedule">
+              <MappingFragment StoreEntitySet="DoctorsSchedule">
+                <ScalarProperty Name="ID_записи" ColumnName="ID_записи" />
+                <ScalarProperty Name="ID_врача" ColumnName="ID_врача" />
+                <ScalarProperty Name="Дата" ColumnName="Дата" />
+                <ScalarProperty Name="Время_начала" ColumnName="Время_начала" />
+                <ScalarProperty Name="Время_окончания" ColumnName="Время_окончания" />
+                <ScalarProperty Name="Доступность" ColumnName="Доступность" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="PoliklinikaModel.Patients">
+              <MappingFragment StoreEntitySet="Patients">
+                <ScalarProperty Name="ID_пациента" ColumnName="ID_пациента" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Адрес" ColumnName="Адрес" />
+                <ScalarProperty Name="Номер_телефона" ColumnName="Номер_телефона" />
+                <ScalarProperty Name="Дата_рождения" ColumnName="Дата_рождения" />
+                <ScalarProperty Name="ID_участка" ColumnName="ID_участка" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="PoliklinikaModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ID_пользователя" ColumnName="ID_пользователя" />
+                <ScalarProperty Name="Логин" ColumnName="Логин" />
+                <ScalarProperty Name="Пароль" ColumnName="Пароль" />
+                <ScalarProperty Name="Тип" ColumnName="Тип" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
